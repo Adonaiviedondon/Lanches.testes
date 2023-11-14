@@ -5,17 +5,15 @@ idUser int primary key auto_increment,
 Usuario varchar(50) not null,
 Fone varchar(15),
 Login varchar(15) not null unique,
-Senha varchar(10)not null
+Senha varchar(10)not null,
+Perfil varchar(10) not null
 );
-alter table tbUsuarios add column perfil varchar(20) not null;
-update tbUsuarios set perfil = 'admim' where idUser=1;
-update tbUsuarios set perfil = 'user' where idUser=2;
 
 describe tbUsuarios;
-insert  into tbUsuarios(idUser,Usuario,Fone,Login,Senha)
-values(1,'Adonai DomDom','1234567898','DomDom','12345');
-insert  into tbUsuarios(Usuario,Fone,Login,Senha)
-values('Tela','1234567898','tela','123');
+insert  into tbUsuarios(idUser,Usuario,Fone,Login,Senha,Perfil)
+values(1,'Adonai DomDom','1234567898','DomDom','12345','Admin');
+insert  into tbUsuarios(Usuario,Fone,Login,Senha,Perfil)
+values('Tela','1234567898','tela','123','User');
 select * from tbUsuarios;
 update tbUsuarios set fone='0' where idUser='2';
 create table tbClientes(
@@ -47,10 +45,6 @@ idBebida int not null,
 foreign key (idCliente) references tbClientes (idCliente),
 foreign key (idLanche) references tbCardapio (idLanche),
 foreign key (idBebida) references tbBebidas (idBebida));
-
-
-
-
 
 
 
