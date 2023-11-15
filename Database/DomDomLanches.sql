@@ -15,7 +15,7 @@ values(1,'Adonai DomDom','1234567898','DomDom','12345','Admin');
 insert  into tbUsuarios(Usuario,Fone,Login,Senha,Perfil)
 values('Tela','1234567898','tela','123','User');
 select * from tbUsuarios;
-update tbUsuarios set fone='0' where idUser='2';
+
 create table tbClientes(
 idCliente int primary key auto_increment,
 nomeCliente varchar(50) not null,

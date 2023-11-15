@@ -40,10 +40,12 @@ public class TelaLogin extends JFrame {
                     principal.setVisible(true);
                     TelaPrincipal.jMUsuario.setEnabled(true);
                     TelaPrincipal.jMenuCadastro.setEnabled(true);
+                    TelaPrincipal.jLabelUsario.setText(rs.getString(2));
                     this.dispose();
                 } else {                    
                     TelaPrincipal principal = new TelaPrincipal();
                     principal.setVisible(true);
+                    TelaPrincipal.jLabelUsario.setText(rs.getString(2));
                     this.dispose();
                 }
             } else {
