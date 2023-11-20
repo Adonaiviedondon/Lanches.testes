@@ -7,6 +7,7 @@ import Formatacao.FormatTft;
 import javax.swing.DefaultListModel;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
+import static sun.jvm.hotspot.HelloWorld.e;
 
 /**
  *
@@ -235,6 +236,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                 txtFoneUsuarioActionPerformed(evt);
             }
         });
+        txtFoneUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtFoneUsuarioKeyTyped(evt);
+            }
+        });
         getContentPane().add(txtFoneUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, 180, -1));
         getContentPane().add(txtLoginUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 200, 180, -1));
 
@@ -340,6 +346,14 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     private void listNomesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listNomesMouseClicked
         buscar();
     }//GEN-LAST:event_listNomesMouseClicked
+
+    private void txtFoneUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFoneUsuarioKeyTyped
+        String car = "0123456789";
+        if(!car.contains(evt.getKeyChar() +"")){
+            evt.consume();
+        }
+        
+    }//GEN-LAST:event_txtFoneUsuarioKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
