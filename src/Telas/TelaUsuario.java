@@ -2,12 +2,11 @@ package Telas;
 
 import java.sql.*;
 import ConexaoDB.ModuloConexao;
-import Formatacao.FormatMasck;
 import Formatacao.FormatTft;
 import javax.swing.DefaultListModel;
-import javax.swing.JFormattedTextField;
+import Formatacao.Validador;
 import javax.swing.JOptionPane;
-import static sun.jvm.hotspot.HelloWorld.e;
+
 
 /**
  *
@@ -185,7 +184,6 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         txtFoneUsuario = new javax.swing.JTextField();
         txtLoginUsuario = new javax.swing.JTextField();
         txtSenhaUsuario = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
         boxPerfilUsuario = new javax.swing.JComboBox<>();
         btAdicionar = new javax.swing.JButton();
         btAtualizar = new javax.swing.JButton();
@@ -231,6 +229,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         });
         getContentPane().add(txtNomeUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 460, -1));
 
+        txtFoneUsuario.setDocument( new Validador(11));
         txtFoneUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtFoneUsuarioActionPerformed(evt);
@@ -250,7 +249,6 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             }
         });
         getContentPane().add(txtSenhaUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 260, 180, -1));
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(93, 322, -1, -1));
 
         boxPerfilUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "user" }));
         boxPerfilUsuario.addActionListener(new java.awt.event.ActionListener() {
@@ -305,7 +303,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         });
         jNomes.setViewportView(listNomes);
 
-        getContentPane().add(jNomes, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, 460, 100));
+        getContentPane().add(jNomes, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, 460, 90));
 
         setBounds(0, 0, 640, 520);
     }// </editor-fold>//GEN-END:initComponents
@@ -362,7 +360,6 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     private javax.swing.JButton btAtualizar;
     private javax.swing.JButton btDeletar;
     private javax.swing.JLabel jFoneUsuaruo;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLoginUsuario;
     private javax.swing.JLabel jNomeUsuario;
     private javax.swing.JScrollPane jNomes;
