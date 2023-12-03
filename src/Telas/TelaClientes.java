@@ -1,0 +1,293 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
+ */
+package Telas;
+import ConexaoDB.ModuloConexao;
+import Formatacao.FormatTft;
+import java.sql.*;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+
+
+/**
+ *
+ * @author tyago
+ */
+public class TelaClientes extends javax.swing.JInternalFrame {
+
+    Connection conexao = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    
+    public TelaClientes() {
+        initComponents();
+        txtNome.setDocument(new FormatTft(50, FormatTft.TipoEntrada.NOME));
+        txtCidade.setDocument(new FormatTft(50, FormatTft.TipoEntrada.NOME));
+        txtBairro.setDocument(new FormatTft(50, FormatTft.TipoEntrada.NOME));
+        txtEndereço.setDocument(new FormatTft(50, FormatTft.TipoEntrada.NOME));
+        txtEmail.setDocument(new FormatTft(50, FormatTft.TipoEntrada.EMAIL));
+        conexao = ModuloConexao.conector();
+    }
+    
+    private void listar() {
+        DefaultListModel<String> list = new DefaultListModel<>();
+        listNomes.setModel(list);
+        String readLista = "select * from tbClientes where nomeCliente like '" + txtNome.getText() + "%'" + "order by nomeCliente";
+        try {
+            conexao = ModuloConexao.conector();
+            pst = conexao.prepareStatement(readLista);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                JNomes.setVisible(true);
+                list.addElement(rs.getString(2));
+                if (txtNome.getText().isEmpty()) {
+                    JNomes.setVisible(false);
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+            System.out.println(ex);
+        }
+    }
+    private void buscar() {
+        int busca = listNomes.getSelectedIndex();
+        if (busca >= 0) {
+            String buscaNome = "select * from tbClientes where nomeCliente like '" + txtNome.getText() + "%'" + "order by nomeCliente";
+            try {
+                conexao = ModuloConexao.conector();
+                pst = conexao.prepareStatement(buscaNome);
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    JNomes.setVisible(false);
+                    idCliente.setText(rs.getString(1));
+                    txtNome.setText(rs.getString(2));
+                    txtCidade.setText(rs.getString(3));
+                    txtBairro.setText(rs.getString(4));
+                    txtEndereço.setText(rs.getString(5));
+                    jFormattedCep.setText(rs.getString(6));
+                    txtEmail.setText(rs.getString(7));
+                    jFormattedFone.setText(rs.getString(8));
+                }
+
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        } else {
+            JNomes.setVisible(false);
+        }
+    }
+    private void adicionar() {
+        String sql = "insert into tbClientes(nomeCliente,cidadeCliente,bairroCliente,endCliente,cepCliente,emailCLiente,foneCliente) values(?,?,?,?,?,?,?)";
+        try {
+            conexao = ModuloConexao.conector();
+            pst = conexao.prepareStatement(sql);
+            //pst.setString(1,txtIdUsuario.getText());
+            pst.setString(1, txtNome.getText());
+            pst.setString(2, txtCidade.getText());
+            pst.setString(3, txtBairro.getText());
+            pst.setString(4, txtEndereço.getText());
+            pst.setString(5, jFormattedCep.getText());
+            pst.setString(6, txtEmail.getText());
+            pst.setString(7, jFormattedFone.getText());
+            if (txtNome.getText().isEmpty() || txtCidade.getText().isEmpty() || txtBairro.getText().isEmpty() || txtEndereço.getText().isEmpty() || jFormattedCep.getText().isEmpty()|| txtEmail.getText().isEmpty()||jFormattedFone.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Informe todos os campos");
+
+            } else {
+
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Usuário adicionado com sucesso");
+                txtNome.setText(null);
+                txtCidade.setText(null);
+                txtBairro.setText(null);
+                jFormattedCep.setText(null);
+                txtEndereço.setText(null);
+                txtEmail.setText(null);
+                jFormattedFone.setText(null);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possivel cadastrar o usuário");
+            System.out.println(ex);
+
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+
+    }
+
+   
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        txtBairro = new javax.swing.JTextField();
+        txtNome = new javax.swing.JTextField();
+        txtCidade = new javax.swing.JTextField();
+        txtEndereço = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
+        JNomes = new javax.swing.JScrollPane();
+        listNomes = new javax.swing.JList<>();
+        jFormattedCep = new javax.swing.JFormattedTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jFormattedFone = new javax.swing.JFormattedTextField();
+        idCliente = new javax.swing.JTextField();
+
+        setClosable(true);
+        setIconifiable(true);
+        setResizable(true);
+        setTitle("Clientes");
+        setPreferredSize(new java.awt.Dimension(640, 520));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setText("Nome:");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(65, 32, -1, -1));
+
+        jLabel2.setText("Bairro:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(67, 168, -1, -1));
+
+        jLabel3.setText("Cidade:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 168, -1, -1));
+
+        jLabel4.setText("Endereço:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 225, -1, -1));
+
+        jLabel5.setText("CEP:");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(407, 225, -1, -1));
+
+        jLabel6.setText("Email:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 265, -1, -1));
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/atualizar.png"))); // NOI18N
+        jButton1.setPreferredSize(new java.awt.Dimension(60, 60));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(271, 352, -1, -1));
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/deletar.png"))); // NOI18N
+        jButton2.setPreferredSize(new java.awt.Dimension(60, 60));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(443, 352, -1, -1));
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/adcionar.png"))); // NOI18N
+        jButton3.setPreferredSize(new java.awt.Dimension(60, 60));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 352, -1, -1));
+
+        txtBairro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBairroActionPerformed(evt);
+            }
+        });
+        getContentPane().add(txtBairro, new org.netbeans.lib.awtextra.AbsoluteConstraints(113, 165, 266, -1));
+
+        txtNome.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtNome.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNomeKeyReleased(evt);
+            }
+        });
+        getContentPane().add(txtNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(113, 29, 492, -1));
+        getContentPane().add(txtCidade, new org.netbeans.lib.awtextra.AbsoluteConstraints(443, 165, 162, -1));
+        getContentPane().add(txtEndereço, new org.netbeans.lib.awtextra.AbsoluteConstraints(113, 222, 276, -1));
+        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(114, 262, 276, -1));
+
+        JNomes.setBorder(null);
+
+        listNomes.setBorder(null);
+        listNomes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listNomesMouseClicked(evt);
+            }
+        });
+        JNomes.setViewportView(listNomes);
+
+        JNomes.setVisible(false);
+
+        getContentPane().add(JNomes, new org.netbeans.lib.awtextra.AbsoluteConstraints(113, 51, 492, 94));
+
+        try {
+            jFormattedCep.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#####-###")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        getContentPane().add(jFormattedCep, new org.netbeans.lib.awtextra.AbsoluteConstraints(443, 222, 94, -1));
+
+        jLabel7.setText("Fone:");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(402, 265, -1, -1));
+
+        try {
+            jFormattedFone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##) #####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        getContentPane().add(jFormattedFone, new org.netbeans.lib.awtextra.AbsoluteConstraints(443, 262, 94, -1));
+
+        idCliente.setVisible(false);
+        getContentPane().add(idCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
+
+        setBounds(0, 0, 640, 520);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtBairroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBairroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBairroActionPerformed
+
+    private void txtNomeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeKeyReleased
+        listar();
+    }//GEN-LAST:event_txtNomeKeyReleased
+
+    private void listNomesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listNomesMouseClicked
+        buscar();
+    }//GEN-LAST:event_listNomesMouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        adicionar();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane JNomes;
+    private javax.swing.JTextField idCliente;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JFormattedTextField jFormattedCep;
+    private javax.swing.JFormattedTextField jFormattedFone;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JList<String> listNomes;
+    private javax.swing.JTextField txtBairro;
+    private javax.swing.JTextField txtCidade;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtEndereço;
+    private javax.swing.JTextField txtNome;
+    // End of variables declaration//GEN-END:variables
+}
