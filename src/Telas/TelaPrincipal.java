@@ -52,6 +52,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jDesktop.setBackground(new java.awt.Color(255, 255, 204));
         jDesktop.setPreferredSize(new java.awt.Dimension(640, 520));
         jDesktop.setVerifyInputWhenFocusTarget(false);
 

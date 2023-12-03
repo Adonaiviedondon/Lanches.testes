@@ -3,6 +3,7 @@ package Telas;
 import java.sql.*;
 import ConexaoDB.ModuloConexao;
 import Formatacao.FormatTft;
+import java.awt.HeadlessException;
 import javax.swing.DefaultListModel;
 
 import javax.swing.JOptionPane;
@@ -67,12 +68,14 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                     txtLoginUsuario.setText(rs.getString(4));
                     txtSenhaUsuario.setText(rs.getString(5));
                     boxPerfilUsuario.setSelectedItem(rs.getString(6));
+                    btAdicionar.setEnabled(false);
                 }
 
             } catch (Exception e) {
             }
         } else {
             jNomes.setVisible(false);
+            
         }
     }
 
@@ -100,7 +103,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                 txtLoginUsuario.setText(null);
                 txtSenhaUsuario.setText(null);
             }
-        } catch (Exception e) {
+        } catch (SQLIntegrityConstraintViolationException e1) {
+            JOptionPane.showMessageDialog(null, "Login em uso.\nEscolha outro login.");
+            txtLoginUsuario.setText(null);
+            txtLoginUsuario.requestFocus();
+        }catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(null, "Não foi possivel cadastrar o usuário");
 
         } finally {
@@ -135,7 +142,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                 txtSenhaUsuario.setText(null);
             }
 
-        } catch (Exception e) {
+        } catch (SQLIntegrityConstraintViolationException e1) {
+            JOptionPane.showMessageDialog(null, "Login em uso.\nEscolha outro login.");
+            txtLoginUsuario.setText(null);
+            txtLoginUsuario.requestFocus();
+        } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(null, "Não foi possivel alterar os dados do usuário");
             System.out.println(e);
         } finally {

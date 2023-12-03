@@ -3,12 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
 package Telas;
+
 import ConexaoDB.ModuloConexao;
 import Formatacao.FormatTft;
+import java.awt.HeadlessException;
 import java.sql.*;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-
 
 /**
  *
@@ -19,7 +20,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
     Connection conexao = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
-    
+
     public TelaClientes() {
         initComponents();
         txtNome.setDocument(new FormatTft(50, FormatTft.TipoEntrada.NOME));
@@ -29,7 +30,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         txtEmail.setDocument(new FormatTft(50, FormatTft.TipoEntrada.EMAIL));
         conexao = ModuloConexao.conector();
     }
-    
+
     private void listar() {
         DefaultListModel<String> list = new DefaultListModel<>();
         listNomes.setModel(list);
@@ -50,6 +51,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
             System.out.println(ex);
         }
     }
+
     private void buscar() {
         int busca = listNomes.getSelectedIndex();
         if (busca >= 0) {
@@ -68,6 +70,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                     jFormattedCep.setText(rs.getString(6));
                     txtEmail.setText(rs.getString(7));
                     jFormattedFone.setText(rs.getString(8));
+                    btAdicionar.setEnabled(false);
                 }
 
             } catch (SQLException e) {
@@ -77,6 +80,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
             JNomes.setVisible(false);
         }
     }
+
     private void adicionar() {
         String sql = "insert into tbClientes(nomeCliente,cidadeCliente,bairroCliente,endCliente,cepCliente,emailCLiente,foneCliente) values(?,?,?,?,?,?,?)";
         try {
@@ -90,7 +94,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
             pst.setString(5, jFormattedCep.getText());
             pst.setString(6, txtEmail.getText());
             pst.setString(7, jFormattedFone.getText());
-            if (txtNome.getText().isEmpty() || txtCidade.getText().isEmpty() || txtBairro.getText().isEmpty() || txtEndereço.getText().isEmpty() || jFormattedCep.getText().isEmpty()|| txtEmail.getText().isEmpty()||jFormattedFone.getText().isEmpty()) {
+            if (txtNome.getText().isEmpty() || txtCidade.getText().isEmpty() || txtBairro.getText().isEmpty() || txtEndereço.getText().isEmpty() || jFormattedCep.getText().isEmpty() || txtEmail.getText().isEmpty() || jFormattedFone.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Informe todos os campos");
 
             } else {
@@ -119,7 +123,67 @@ public class TelaClientes extends javax.swing.JInternalFrame {
 
     }
 
-   
+    private void atualizar() {
+        String sql = "update tbClientes set nomeCliente = ?, cidadeCliente = ?, bairroCliente = ?, endCliente = ?, cepCliente = ?, emailCLiente = ?,foneCliente = ? where idCliente = ? ";
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtNome.getText());
+            pst.setString(2, txtCidade.getText());
+            pst.setString(3, txtBairro.getText());
+            pst.setString(4, jFormattedCep.getText());
+            pst.setString(5, txtEndereço.getText());
+            pst.setString(6, txtEmail.getText());
+            pst.setString(7, jFormattedFone.getText());
+            if (txtNome.getText().isEmpty() || txtCidade.getText().isEmpty() || txtBairro.getText().isEmpty() || txtEndereço.getText().isEmpty() || jFormattedCep.getText().isEmpty() || txtEmail.getText().isEmpty() || jFormattedFone.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Informe todos os campos");
+            } else {
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
+                txtNome.setText(null);
+                txtCidade.setText(null);
+                txtBairro.setText(null);
+                jFormattedCep.setText(null);
+                txtEndereço.setText(null);
+                txtEmail.setText(null);
+                jFormattedFone.setText(null);
+            }
+
+        } catch (HeadlessException | SQLException e) {
+            JOptionPane.showMessageDialog(null, "Não foi possivel alterar os dados do usuário");
+            System.out.println(e);
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+    }
+
+    private void remover() {
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover o usuário?", "Atenção!", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            String sql = "delete from tbClientes where idCliente=?";
+            try {
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, idCliente.getText());
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Usuário excluido com sucesso!");
+                idCliente.setText(null);
+                txtNome.setText(null);
+                txtCidade.setText(null);
+                txtBairro.setText(null);
+                jFormattedCep.setText(null);
+                txtEndereço.setText(null);
+                txtEmail.setText(null);
+                jFormattedFone.setText(null);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -130,9 +194,9 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btAtualizar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btAdicionar = new javax.swing.JButton();
         txtBairro = new javax.swing.JTextField();
         txtNome = new javax.swing.JTextField();
         txtCidade = new javax.swing.JTextField();
@@ -170,9 +234,14 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         jLabel6.setText("Email:");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 265, -1, -1));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/atualizar.png"))); // NOI18N
-        jButton1.setPreferredSize(new java.awt.Dimension(60, 60));
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(271, 352, -1, -1));
+        btAtualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/atualizar.png"))); // NOI18N
+        btAtualizar.setPreferredSize(new java.awt.Dimension(60, 60));
+        btAtualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAtualizarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btAtualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(271, 352, -1, -1));
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/deletar.png"))); // NOI18N
         jButton2.setPreferredSize(new java.awt.Dimension(60, 60));
@@ -183,14 +252,14 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         });
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(443, 352, -1, -1));
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/adcionar.png"))); // NOI18N
-        jButton3.setPreferredSize(new java.awt.Dimension(60, 60));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/adcionar.png"))); // NOI18N
+        btAdicionar.setPreferredSize(new java.awt.Dimension(60, 60));
+        btAdicionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btAdicionarActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 352, -1, -1));
+        getContentPane().add(btAdicionar, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 352, -1, -1));
 
         txtBairro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -248,7 +317,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        remover();// TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtBairroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBairroActionPerformed
@@ -263,17 +332,21 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         buscar();
     }//GEN-LAST:event_listNomesMouseClicked
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAdicionarActionPerformed
         adicionar();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btAdicionarActionPerformed
+
+    private void btAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAtualizarActionPerformed
+        atualizar();
+    }//GEN-LAST:event_btAtualizarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane JNomes;
+    private javax.swing.JButton btAdicionar;
+    private javax.swing.JButton btAtualizar;
     private javax.swing.JTextField idCliente;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JFormattedTextField jFormattedCep;
     private javax.swing.JFormattedTextField jFormattedFone;
     private javax.swing.JLabel jLabel1;
