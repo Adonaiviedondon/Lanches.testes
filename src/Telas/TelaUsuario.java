@@ -5,14 +5,8 @@ import ConexaoDB.ModuloConexao;
 import Formatacao.FormatTft;
 import java.awt.HeadlessException;
 import javax.swing.DefaultListModel;
-
 import javax.swing.JOptionPane;
 
-
-/**
- *
- * @author tyago
- */
 public class TelaUsuario extends javax.swing.JInternalFrame {
 
     Connection conexao = null;
@@ -90,11 +84,12 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             pst.setString(3, txtLoginUsuario.getText());
             pst.setString(4, txtSenhaUsuario.getText());
             pst.setString(5, boxPerfilUsuario.getSelectedItem().toString());
+            
             if (txtNomeUsuario.getText().isEmpty() || txtFoneUsuario.getText().isEmpty() || txtLoginUsuario.getText().isEmpty() || txtSenhaUsuario.getText().isEmpty() || boxPerfilUsuario.getSelectedItem().toString().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Informe todos os campos");
-
+            } else if (txtSenhaUsuario.getText().length() < 6) {
+                JOptionPane.showMessageDialog(null, "A senha precisa ter no mínimo 6 caracteres.");
             } else {
-
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Usuário adicionado com sucesso");
                 txtIdUsuario.setText(null);
